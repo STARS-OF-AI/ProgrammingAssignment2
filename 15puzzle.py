@@ -1,7 +1,7 @@
 
 
-def recursive_breadth_first(start,end):
-    #recursive bfs
+def recursive_best_first(start,end):
+    #recursive best first, currently just a bfs
     front = [[start]]
     expanded = []
     expanded_nodes=0
@@ -21,7 +21,7 @@ def recursive_breadth_first(start,end):
         expanded_nodes += 1
         if endnode == end: break
 
-    print("Recursive Breadth First")
+    print("Recursive Best First")
     print("Number of expanded nodes:",expanded_nodes)
     print("Solution:")
     print_path(path)
@@ -151,7 +151,7 @@ def main():
                [4,  5,  6,  7],
                [8,  9, 10, 11],
                [12, 13, 14, 15]])
-    recursive_breadth_first(puzzle,end)
+    recursive_best_first(puzzle,end)
     iterative_deepening_astar_h1(puzzle,end)
     iterative_deepening_astar_h2(puzzle,end)
   
