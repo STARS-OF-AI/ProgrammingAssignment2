@@ -7,6 +7,8 @@ def recursive_best_first_h1(start,end):
     expanded_nodes=0
     h1 = []
     i = 0
+    f_limit = 20
+    depth = 0
     while front:
         path = front[i]
         h1.append(path[0])
@@ -15,17 +17,29 @@ def recursive_best_first_h1(start,end):
         if endnode == end:
             break
         if endnode in expanded: continue
-        for k in moves(endnode):
+        for k in moves(endnode): 
             if k in expanded: continue
+            if (heuristic_1(k)+depth) > f_limit:
+                #print('flimit reached h1', depth)
+                depth = 0
+                continue
             newpath = [path[0] + heuristic_1(k) - heuristic_1(endnode)] + path[1:] + [k] 
             front.append(newpath)
             expanded.append(endnode)
         expanded_nodes += 1
+        depth+=1
+        
 
-    print("Recursive Best First with H1")
+    path.pop(0)
+    print("Best First with H1")
+
     print("Number of expanded nodes:",expanded_nodes)
-    print("Solution:")
-    print_path(path)
+    y = 0
+    for x in path:
+        y += 1
+    print("Solution length: ", y)
+    print("Number of misplaced tiles (0 means completely solved) ", heuristic_1(x))
+    #print_path(path)
     #print("Heuristic: ", h1)
 
 def recursive_best_first_h2(start,end):
@@ -35,6 +49,8 @@ def recursive_best_first_h2(start,end):
     expanded_nodes=0
     h2 = []
     i = 0
+    f_limit = 30
+    depth = 0
     while front:
         path = front[i]
         h2.append(path[0])
@@ -45,15 +61,25 @@ def recursive_best_first_h2(start,end):
         if endnode in expanded: continue
         for k in moves(endnode):
             if k in expanded: continue
+            if (heuristic_1(k)+depth) > f_limit:
+                #print('flimit reached h1', depth)
+                depth = 0
+                continue
             newpath = [path[0] + heuristic_2(k) - heuristic_2(endnode)] + path[1:] + [k] 
             front.append(newpath)
             expanded.append(endnode)
         expanded_nodes += 1
+        depth += 1
 
-    print("Recursive Best First with H2")
+    path.pop(0)
+    print("Best First with H2")
     print("Number of expanded nodes:",expanded_nodes)
-    print("Solution:")
-    print_path(path)
+    y = 0
+    for x in path:
+        y += 1
+    print("Solution length: ", y)
+    print("Number of misplaced tiles (0 means completely solved) ", heuristic_1(x))
+    #print_path(path)
     #print("Heuristic: ", h2)
     
 def iterative_deepening_astar_h1(start,end):
@@ -79,11 +105,17 @@ def iterative_deepening_astar_h1(start,end):
             front.append(newpath)
             expanded.append(endnode)
         expanded_nodes += 1
+        if expanded_nodes > 10000: break
 
+    path.pop(0)
     print("A* algo using heuristic 1")
     print("Number of expanded nodes", expanded_nodes)
-    print("Solution:")
-    print_path(path)
+    y = 0
+    for x in path:
+        y += 1
+    print("Solution length: ", y)
+    print("Number of misplaced tiles (0 means completely solved) ", heuristic_1(x))
+    #print_path(path)
 
 
 def iterative_deepening_astar_h2(start,end):
@@ -108,11 +140,16 @@ def iterative_deepening_astar_h2(start,end):
             front.append(newpath)
             expanded.append(endnode)
         expanded_nodes += 1
+        if expanded_nodes > 10000: break
 
     print("A* algo using heuristic 2")
     print("Number of expanded nodes", expanded_nodes)
-    print("Solution:")
-    print_path(path)
+    y = 0
+    for x in path:
+        y += 1
+    print("Solution length: ", y)
+    print("Number of misplaced tiles (0 means completely solved) ", heuristic_1(x))
+    #print_path(path)
 
 
 def moves(mat): 
@@ -182,7 +219,6 @@ def main():
                [4,  5,  6,  7],
                [8,  9, 10, 11],
                [12, 13, 14, 15]])
-    
     recursive_best_first_h1(puzzle,end)
     recursive_best_first_h2(puzzle,end)
     iterative_deepening_astar_h1(puzzle,end)
