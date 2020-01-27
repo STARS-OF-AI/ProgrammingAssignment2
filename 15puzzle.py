@@ -5,9 +5,11 @@ def recursive_best_first_h1(start,end):
     front = [[heuristic_1(start), start]]
     expanded = []
     expanded_nodes=0
+    h1 = []
+    i = 0
     while front:
-        i = 0
         path = front[i]
+        h1.append(path[0])
         front = front[:i] + front[i+1:]
         endnode = path[-1]
         if endnode == end:
@@ -24,15 +26,18 @@ def recursive_best_first_h1(start,end):
     print("Number of expanded nodes:",expanded_nodes)
     print("Solution:")
     print_path(path)
+    #print("Heuristic: ", h1)
 
 def recursive_best_first_h2(start,end):
     #recursive best first, currently just a bfs
     front = [[heuristic_2(start), start]]
     expanded = []
     expanded_nodes=0
+    h2 = []
+    i = 0
     while front:
-        i = 0
         path = front[i]
+        h2.append(path[0])
         front = front[:i] + front[i+1:]
         endnode = path[-1]
         if endnode == end:
@@ -42,7 +47,6 @@ def recursive_best_first_h2(start,end):
             if k in expanded: continue
             newpath = [path[0] + heuristic_2(k) - heuristic_2(endnode)] + path[1:] + [k] 
             front.append(newpath)
-            print(newpath)
             expanded.append(endnode)
         expanded_nodes += 1
 
@@ -50,12 +54,12 @@ def recursive_best_first_h2(start,end):
     print("Number of expanded nodes:",expanded_nodes)
     print("Solution:")
     print_path(path)
+    #print("Heuristic: ", h2)
     
 def iterative_deepening_astar_h1(start,end):
 #a*
     
     front = [[heuristic_1(start), start]] 
-    print('front', front)
     expanded = []
     expanded_nodes=0
     while front:
@@ -178,10 +182,11 @@ def main():
                [4,  5,  6,  7],
                [8,  9, 10, 11],
                [12, 13, 14, 15]])
+    
     recursive_best_first_h1(puzzle,end)
     recursive_best_first_h2(puzzle,end)
     iterative_deepening_astar_h1(puzzle,end)
-    #iterative_deepening_astar_h2(puzzle,end)
+    iterative_deepening_astar_h2(puzzle,end)
   
 
 main()
