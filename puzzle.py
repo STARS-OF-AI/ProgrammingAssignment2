@@ -58,7 +58,7 @@ def RBFS_H1(front, end, path):
     solver1.Ttime += millis(stime)
     #print('solver', solver1)
     #path.pop(0)
-    print("ACTUAL RECURSION THIS IS NOT A DRILL!")
+    print("RBFS With H1")
     print("Number of expanded nodes:",solver1.expanded_nodes)
     y = 0
    # print("front ", solver1.path)
@@ -68,6 +68,55 @@ def RBFS_H1(front, end, path):
     print("Number of misplaced tiles (0 means completely solved) ", heuristic_1(x))
     print("Time on heuristic:", solver1.Htime)
     print("Total time in function: ", solver1.Ttime)
+    
+    
+def actualRecursionH2(solver):
+    h2 = []
+    i = 0
+    f_limit = 20
+    
+    if solver.front:
+        solver.path = solver.front[i]
+        h2.append(solver.path[0])
+        solver.front = solver.front[:i] + solver.front[i+1:]
+        endnode = solver.path[-1]
+        if endnode == solver.end: return
+        if endnode in solver.expanded: return
+        for k in moves(endnode):
+            if k in solver.expanded: continue
+            star_time = datetime.now()
+            if (heuristic_2(k)+ solver.depth) > f_limit:
+                solver.Htime += millis(star_time)
+                #print('flimit reached h1', solver.depth)
+                solver.depth = 0
+                continue
+            star_time = datetime.now()
+            newpath = [solver.path[0] + heuristic_2(k) - heuristic_2(endnode)] + solver.path[1:] + [k]
+            solver.Htime += millis(star_time)
+            solver.front.append(newpath)
+            solver.expanded.append(endnode)
+        solver.expanded_nodes += 1
+        solver.depth+=1
+        actualRecursionH2(solver)
+    
+
+def RBFS_H2(front, end, path):
+    solver2 = Solver(path, front, end)
+    stime = datetime.now()
+    actualRecursionH2(solver2)
+    solver2.Ttime += millis(stime)
+    #print('solver', solver1)
+    #path.pop(0)
+    print("RBFS With H2")
+    print("Number of expanded nodes:",solver2.expanded_nodes)
+    y = 0
+   # print("front ", solver1.path)
+    for x in solver2.path:
+        y += 1
+    print("Solution length: ", y)
+    print("Number of misplaced tiles (0 means completely solved) ", heuristic_1(x))
+    print("Time on heuristic:", solver2.Htime)
+    print("Total time in function: ", solver2.Ttime)
     
     
 

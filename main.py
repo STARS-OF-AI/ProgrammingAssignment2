@@ -29,10 +29,11 @@ def main():
                 front = [[p.heuristic_1(puzzle), puzzle]]
                 path = front[0]
                 p.RBFS_H1(front, final, path)
+                p.RBFS_H2(front, final, path)
                 #p.recursive_best_first_h1(puzzle, final)
                 #p.recursive_best_first_h2(puzzle, final)
-                #p.iterative_deepening_astar_h1(puzzle, final)
-                #p.iterative_deepening_astar_h2(puzzle, final)
+                p.iterative_deepening_astar_h1(puzzle, final)
+                p.iterative_deepening_astar_h2(puzzle, final)
 
 
 # function that randomly shuffles the
