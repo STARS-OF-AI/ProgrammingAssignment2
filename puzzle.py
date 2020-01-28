@@ -6,16 +6,25 @@ CS 531 - AI
 February 3, 2020
 ***********************************
 """
+import random
+from datetime import datetime
+
 
 def recursive_best_first_h1(start,end):
     #recursive best first, currently just a bfs
+    t = 0
+    totalT = 0
+    star_time = datetime.now()
     front = [[heuristic_1(start), start]]
+    t += millis(star_time)
     expanded = []
     expanded_nodes=0
     h1 = []
     i = 0
     f_limit = 20
     depth = 0
+
+    stime = datetime.now()
     while front:
         path = front[i]
         h1.append(path[0])
@@ -26,17 +35,22 @@ def recursive_best_first_h1(start,end):
         if endnode in expanded: continue
         for k in moves(endnode):
             if k in expanded: continue
+            star_time = datetime.now()
             if (heuristic_1(k)+depth) > f_limit:
+                t += millis(star_time)
                 #print('flimit reached h1', depth)
                 depth = 0
                 continue
+            star_time = datetime.now()
             newpath = [path[0] + heuristic_1(k) - heuristic_1(endnode)] + path[1:] + [k]
+            t += millis(star_time)
             front.append(newpath)
             expanded.append(endnode)
         expanded_nodes += 1
         depth+=1
 
 
+    totalT += millis(stime)
     path.pop(0)
     print("Best First with H1")
 
@@ -46,6 +60,8 @@ def recursive_best_first_h1(start,end):
         y += 1
     print("Solution length: ", y)
     print("Number of misplaced tiles (0 means completely solved) ", heuristic_1(x))
+    print("Time on heuristic:", t)
+    print("Total time in function: ", totalT)
     #print_path(path)
     #print("Heuristic: ", h1)
 
@@ -215,3 +231,8 @@ def heuristic_2(puzz):
 def print_path(path):
     for i in path:
         print(i)
+
+def millis(start_time):
+   dt = datetime.now() - start_time
+   ms = (dt.days * 24 * 60 * 60 + dt.seconds) * 1000 + dt.microseconds / 1000.0
+   return ms
