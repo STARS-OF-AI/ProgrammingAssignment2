@@ -215,21 +215,3 @@ def heuristic_2(puzz):
 def print_path(path):
     for i in path:
         print(i)
-
-def main():
-    puzzle = str([[1, 2, 6, 3],
-                  [4, 9, 5, 7],
-                  [8, 13, 11, 15],
-                  [12, 14, 0, 10]])
-
-    end = str([[0,  1,  2,  3],
-               [4,  5,  6,  7],
-               [8,  9, 10, 11],
-               [12, 13, 14, 15]])
-    recursive_best_first_h1(puzzle,end)
-    recursive_best_first_h2(puzzle,end)
-    iterative_deepening_astar_h1(puzzle,end)
-    iterative_deepening_astar_h2(puzzle,end)
-  
-
-main()

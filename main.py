@@ -21,10 +21,12 @@ def main():
 
     for i in shuffles:
         print("\nSHUFFLE COUNT: {}".format(i))
-        for j in range(0, 10):
+        for j in range(0, 1):
             puzzle = scramble(i, final)
             print(puzzle)
-            # p.recursive_best_first(puzzle, final)
+
+            p.recursive_best_first_h1(puzzle, final)
+            # p.recursive_best_first_h2(puzzle, final)
             # p.iterative_deepening_astar_h1(puzzle, final)
             # p.iterative_deepening_astar_h2(puzzle, final)
 
