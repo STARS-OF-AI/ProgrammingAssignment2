@@ -72,7 +72,7 @@ def RBFS_H1(front, end, path):
     print("Total time in function: ", solver1.Ttime)
 
     # time, total time, num expanded nodes, soln length
-    return solver1.Htime, solver1.Ttime, solver1.expanded_nodes, y
+    return solver1.Htime, solver1.Ttime, solver1.expanded_nodes, y, heuristic_1(x)
 
     
     
@@ -125,7 +125,7 @@ def RBFS_H2(front, end, path):
     print("Total time in function: ", solver2.Ttime)
     
     # time, total time, num expanded nodes, soln length
-    return solver2.Htime, solver2.Ttime, solver2.expanded_nodes, y
+    return solver2.Htime, solver2.Ttime, solver2.expanded_nodes, y, heuristic_1(x)
 
 
 def iterative_deepening_astar_h1(start,end):
@@ -173,7 +173,7 @@ def iterative_deepening_astar_h1(start,end):
     #print_path(path)
 
     # time, total time, num expanded nodes, soln length
-    return t, totalT, expanded_nodes, y
+    return t, totalT, expanded_nodes, y, heuristic_1(x)
 
 
 def iterative_deepening_astar_h2(start,end):
@@ -220,7 +220,7 @@ def iterative_deepening_astar_h2(start,end):
     #print_path(path)
 
     # time, total time, num expanded nodes, soln length
-    return t, totalT, expanded_nodes, y
+    return t, totalT, expanded_nodes, y, heuristic_1(x)
 
 def moves(mat):
     #returns all possible moves

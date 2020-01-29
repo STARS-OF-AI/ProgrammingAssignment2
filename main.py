@@ -25,87 +25,89 @@ def main():
     # with all the required values
     algs = [{} for i in range(4)]
     for alg in algs:
-        a = {"Heuristic Time": [], "Total Time": [], "Expanded Nodes": [], "Solution Length": []}
+        a = {"Heuristic Time": [], "Total Time": [], "Expanded Nodes": [], "Solution Length": [], "Misplaced Squares": []}
         alg.update(a)
 
-    # for i in range(0,1):
-    i = 10
+    for i in shuffles:
+        # appends border for data
+        append_border(i, algs)
 
-    # appends border for data
-    append_border(i, algs)
+        # main for loop with n=10 runs
+        for j in range(0, 10):
+            puzzle = scramble(i, final)
+            front = [[p.heuristic_1(puzzle), puzzle]]
+            r_path = front[0]
 
-    # main for loop with n=10 runs
-    for j in range(0, 10):
-        puzzle = scramble(i, final)
-        front = [[p.heuristic_1(puzzle), puzzle]]
-        r_path = front[0]
+            # running the RBFS search
+            rbfs_h1(front, final, r_path, algs[0])
+            rbfs_h2(front, final, r_path, algs[1])
 
-        # running the RBFS search
-        rbfs_h1(front, final, r_path, algs[0])
-        rbfs_h2(front, final, r_path, algs[1])
+            # running the A* search
+            astar_h1(puzzle, final, algs[2])
+            astar_h2(puzzle, final, algs[-1])
 
-        # running the A* search
-        astar_h1(puzzle, final, algs[2])
-        astar_h2(puzzle, final, algs[-1])
+        # appending to data frames
+        r1 = DataFrame(algs[0], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length', 'Misplaced Squares'])
+        r2 = DataFrame(algs[1], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length', 'Misplaced Squares'])
+        a1 = DataFrame(algs[2], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length', 'Misplaced Squares'])
+        a2 = DataFrame(algs[-1], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length', 'Misplaced Squares'])
 
-    # appending to data frames
-    r1 = DataFrame(algs[0], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length'])
-    r2 = DataFrame(algs[1], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length'])
-    a1 = DataFrame(algs[2], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length'])
-    a2 = DataFrame(algs[-1], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length'])
+        # function for writing to csv
+        write_to_csv(r1, r2, a1, a2)
 
-    # function for writing to csv
-    write_to_csv(r1, r2, a1, a2)
-
-    print(r1)
-    print(r2)
-    # print(a1)
-    # print(a2)
+        print(r1)
+        print(r2)
+        print(a1)
+        print(a2)
 
 
 # run the RBFS search algorithm for heuristic 1
 def rbfs_h1(front, final, r_path, rbfs1):
     # catch time, total time, num expanded nodes, soln length
-    t, total_t, nodes, length = p.RBFS_H1(front, final, r_path)
+    t, total_t, nodes, length, ms = p.RBFS_H1(front, final, r_path)
 
     # append the values to the dictionary
     rbfs1["Heuristic Time"].append(t)
     rbfs1["Total Time"].append(total_t)
     rbfs1["Expanded Nodes"].append(nodes)
     rbfs1["Solution Length"].append(length)
+    rbfs1["Misplaced Squares"].append(ms)
 
 
 # run the RBFS search algorithm for heuristic 2
 def rbfs_h2(front, final, r_path, rbfs2):
-    t, total_t, nodes, length = p.RBFS_H2(front, final, r_path)
+    t, total_t, nodes, length, ms = p.RBFS_H2(front, final, r_path)
 
     # append the values to the dictionary
     rbfs2["Heuristic Time"].append(t)
     rbfs2["Total Time"].append(total_t)
     rbfs2["Expanded Nodes"].append(nodes)
     rbfs2["Solution Length"].append(length)
+    rbfs2["Misplaced Squares"].append(ms)
 
 
 # run the A* search algorithm for heuristic 1
 def astar_h1(puzzle, final, astar1):
-    t, total_t, nodes, length = p.iterative_deepening_astar_h1(puzzle, final)
+    t, total_t, nodes, length, ms = p.iterative_deepening_astar_h1(puzzle, final)
 
     # append the values to the dictionary
     astar1["Heuristic Time"].append(t)
     astar1["Total Time"].append(total_t)
     astar1["Expanded Nodes"].append(nodes)
     astar1["Solution Length"].append(length)
+    astar1["Misplaced Squares"].append(ms)
 
 
 # run the A* search algorithm for heuristic 2
 def astar_h2(puzzle, final, astar2):
-    t, total_t, nodes, length = p.iterative_deepening_astar_h2(puzzle, final)
+    t, total_t, nodes, length, ms = p.iterative_deepening_astar_h2(puzzle, final)
 
     # append the values to the dictionary
     astar2["Heuristic Time"].append(t)
     astar2["Total Time"].append(total_t)
     astar2["Expanded Nodes"].append(nodes)
     astar2["Solution Length"].append(length)
+    astar2["Misplaced Squares"].append(ms)
 
 
 # function for writing data to csv
@@ -132,7 +134,7 @@ def append_border(i, algs):
         a["Total Time"].append("M = {}".format(i))
         a["Expanded Nodes"].append("M = {}".format(i))
         a["Solution Length"].append("M = {}".format(i))
-
+        a["Misplaced Squares"].append("M = {}".format(i))
 
 # function that randomly shuffles the
 # puzzle board, param = # of shuffles
