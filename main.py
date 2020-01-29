@@ -40,6 +40,11 @@ def main():
         # p.recursive_best_first_h1(puzzle, final)
         # p.recursive_best_first_h2(puzzle, final)
 
+        front = [[p.heuristic_1(puzzle), puzzle]]
+        path = front[0]
+        p.RBFS_H1(front, final, path)
+        p.RBFS_H2(front, final, path)
+
         astar_h1(puzzle, final, algs[2])
         astar_h2(puzzle, final, algs[-1])
 
