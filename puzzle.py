@@ -9,114 +9,116 @@ February 3, 2020
 import random
 from datetime import datetime
 
+class Solver:
+  def __init__(self, path, front, end):
+    self.path = path
+    self.front = front
+    self.end = end
+    self.depth = 0
+    self.expanded_nodes = 0
+    self.Htime = 0
+    self.Ttime = 0
+    self.expanded = []
 
-def recursive_best_first_h1(start,end):
-    #recursive best first, currently just a bfs
-    t = 0
-    totalT = 0
-    star_time = datetime.now()
-    front = [[heuristic_1(start), start]]
-    t += millis(star_time)
-    expanded = []
-    expanded_nodes=0
+
+def actualRecursionH1(solver):
     h1 = []
     i = 0
     f_limit = 20
-    depth = 0
-
-    stime = datetime.now()
-    while front:
-        path = front[i]
-        h1.append(path[0])
-        front = front[:i] + front[i+1:]
-        endnode = path[-1]
-        if endnode == end:
-            break
-        if endnode in expanded: continue
+    
+    if solver.front:
+        solver.path = solver.front[i]
+        h1.append(solver.path[0])
+        solver.front = solver.front[:i] + solver.front[i+1:]
+        endnode = solver.path[-1]
+        if endnode == solver.end: return
+        if endnode in solver.expanded: return
         for k in moves(endnode):
-            if k in expanded: continue
+            if k in solver.expanded: continue
             star_time = datetime.now()
-            if (heuristic_1(k)+depth) > f_limit:
-                t += millis(star_time)
-                #print('flimit reached h1', depth)
-                depth = 0
+            if (heuristic_1(k)+ solver.depth) > f_limit:
+                solver.Htime += millis(star_time)
+                #print('flimit reached h1', solver.depth)
+                solver.depth = 0
                 continue
             star_time = datetime.now()
-            newpath = [path[0] + heuristic_1(k) - heuristic_1(endnode)] + path[1:] + [k]
-            t += millis(star_time)
-            front.append(newpath)
-            expanded.append(endnode)
-        expanded_nodes += 1
-        depth+=1
+            newpath = [solver.path[0] + heuristic_1(k) - heuristic_1(endnode)] + solver.path[1:] + [k]
+            solver.Htime += millis(star_time)
+            solver.front.append(newpath)
+            solver.expanded.append(endnode)
+        solver.expanded_nodes += 1
+        solver.depth+=1
+        actualRecursionH1(solver)
+    
 
-
-    totalT += millis(stime)
-    path.pop(0)
-    print("Best First with H1")
-
-    print("Number of expanded nodes:",expanded_nodes)
+def RBFS_H1(front, end, path):
+    solver1 = Solver(path, front, end)
+    stime = datetime.now()
+    actualRecursionH1(solver1)
+    solver1.Ttime += millis(stime)
+    #print('solver', solver1)
+    #path.pop(0)
+    print("RBFS With H1")
+    print("Number of expanded nodes:",solver1.expanded_nodes)
     y = 0
-    for x in path:
+   # print("front ", solver1.path)
+    for x in solver1.path:
         y += 1
     print("Solution length: ", y)
     print("Number of misplaced tiles (0 means completely solved) ", heuristic_1(x))
-    print("Time on heuristic:", t)
-    print("Total time in function: ", totalT)
-    #print_path(path)
-    #print("Heuristic: ", h1)
-
-def recursive_best_first_h2(start,end):
-    t = 0
-    totalT = 0
-    #recursive best first, currently just a bfs
-    star_time = datetime.now()
-    front = [[heuristic_2(start), start]]
-    t += millis(star_time)
-    expanded = []
-    expanded_nodes=0
+    print("Time on heuristic:", solver1.Htime)
+    print("Total time in function: ", solver1.Ttime)
+    
+    
+def actualRecursionH2(solver):
     h2 = []
     i = 0
-    f_limit = 30
-    depth = 0
-    stime = datetime.now()
-    while front:
-        path = front[i]
-        h2.append(path[0])
-        front = front[:i] + front[i+1:]
-        endnode = path[-1]
-        if endnode == end:
-            break
-        if endnode in expanded: continue
+    f_limit = 20
+    
+    if solver.front:
+        solver.path = solver.front[i]
+        h2.append(solver.path[0])
+        solver.front = solver.front[:i] + solver.front[i+1:]
+        endnode = solver.path[-1]
+        if endnode == solver.end: return
+        if endnode in solver.expanded: return
         for k in moves(endnode):
-            if k in expanded: continue
+            if k in solver.expanded: continue
             star_time = datetime.now()
-            if (heuristic_1(k)+depth) > f_limit:
-                t += millis(star_time)
-                #print('flimit reached h1', depth)
-                depth = 0
+            if (heuristic_2(k)+ solver.depth) > f_limit:
+                solver.Htime += millis(star_time)
+                #print('flimit reached h1', solver.depth)
+                solver.depth = 0
                 continue
-
             star_time = datetime.now()
-            newpath = [path[0] + heuristic_2(k) - heuristic_2(endnode)] + path[1:] + [k]
-            t += millis(star_time)
-            front.append(newpath)
-            expanded.append(endnode)
-        expanded_nodes += 1
-        depth += 1
+            newpath = [solver.path[0] + heuristic_2(k) - heuristic_2(endnode)] + solver.path[1:] + [k]
+            solver.Htime += millis(star_time)
+            solver.front.append(newpath)
+            solver.expanded.append(endnode)
+        solver.expanded_nodes += 1
+        solver.depth+=1
+        actualRecursionH2(solver)
+    
 
-    totalT += millis(stime)
-    path.pop(0)
-    print("Best First with H2")
-    print("Number of expanded nodes:",expanded_nodes)
+def RBFS_H2(front, end, path):
+    solver2 = Solver(path, front, end)
+    stime = datetime.now()
+    actualRecursionH2(solver2)
+    solver2.Ttime += millis(stime)
+    #print('solver', solver1)
+    #path.pop(0)
+    print("RBFS With H2")
+    print("Number of expanded nodes:",solver2.expanded_nodes)
     y = 0
-    for x in path:
+   # print("front ", solver1.path)
+    for x in solver2.path:
         y += 1
     print("Solution length: ", y)
     print("Number of misplaced tiles (0 means completely solved) ", heuristic_1(x))
-    print("Time on heuristic:", t)
-    print("Total time in function: ", totalT)
-    #print_path(path)
-    #print("Heuristic: ", h2)
+    print("Time on heuristic:", solver2.Htime)
+    print("Total time in function: ", solver2.Ttime)
+    
+    
 
 def iterative_deepening_astar_h1(start,end):
     #a*
