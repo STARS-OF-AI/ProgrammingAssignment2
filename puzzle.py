@@ -120,8 +120,8 @@ def recursive_best_first_h2(start,end):
 
 def iterative_deepening_astar_h1(start,end):
     #a*
-    t = 0
-    totalT = 0
+    t = 0  # time spent on heuristic
+    totalT = 0  # total time in function
     star_time = datetime.now()
     front = [[heuristic_1(start), start]]
     t += millis(star_time)
@@ -161,6 +161,9 @@ def iterative_deepening_astar_h1(start,end):
     print("Time on heuristic:", t)
     print("Total time in function: ", totalT)
     #print_path(path)
+
+    # time, total time, num expanded nodes, soln length
+    return t, totalT, expanded_nodes, y
 
 
 def iterative_deepening_astar_h2(start,end):
@@ -206,6 +209,8 @@ def iterative_deepening_astar_h2(start,end):
     print("Total time in function: ", totalT)
     #print_path(path)
 
+    # time, total time, num expanded nodes, soln length
+    return t, totalT, expanded_nodes, y
 
 def moves(mat):
     #returns all possible moves

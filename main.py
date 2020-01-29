@@ -10,6 +10,8 @@ February 3, 2020
 import puzzle as p
 import random as rand
 from copy import deepcopy
+from pandas import DataFrame
+from os import path
 
 
 def main():
@@ -19,17 +21,85 @@ def main():
                  [8,  9, 10, 11],
                  [12, 13, 14, 15]])
 
-    for i in range(0,1):
-        
-        #print("\nSHUFFLE COUNT: {}".format(i))
-            for j in range(0, 10):
-                puzzle = scramble(10, final)
-                print(puzzle)
+    # initializes the algs dictionary
+    # with all the required values
+    algs = [{} for i in range(4)]
+    for alg in algs:
+        a = {"Heuristic Time": [], "Total Time": [], "Expanded Nodes": [], "Solution Length": []}
+        alg.update(a)
 
-                p.recursive_best_first_h1(puzzle, final)
-                p.recursive_best_first_h2(puzzle, final)
-                p.iterative_deepening_astar_h1(puzzle, final)
-                p.iterative_deepening_astar_h2(puzzle, final)
+    # for i in range(0,1):
+    i = 10
+
+    # appends border for data
+    append_border(i, algs)
+
+    # main for loop with n=10 runs
+    for j in range(0, 10):
+        puzzle = scramble(i, final)
+        # p.recursive_best_first_h1(puzzle, final)
+        # p.recursive_best_first_h2(puzzle, final)
+
+        astar_h1(puzzle, final, algs[2])
+        astar_h2(puzzle, final, algs[-1])
+
+    a1 = DataFrame(algs[2], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length'])
+    a2 = DataFrame(algs[-1], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length'])
+
+    # function for writing to csv
+    write_to_csv(a1, a2)
+
+    print(a1)
+    print(a2)
+
+
+def astar_h1(puzzle, final, astar1):
+    # defining dict to store data
+
+    # run the A* search algorithm for heuristic 1
+    t, total_t, nodes, length = p.iterative_deepening_astar_h1(puzzle, final)
+
+    # append the values to the dictionary
+    astar1["Heuristic Time"].append(t)
+    astar1["Total Time"].append(total_t)
+    astar1["Expanded Nodes"].append(nodes)
+    astar1["Solution Length"].append(length)
+
+
+def astar_h2(puzzle, final, astar2):
+    # run the A* search algorithm for heuristic 1
+    t, total_t, nodes, length = p.iterative_deepening_astar_h2(puzzle, final)
+
+    # append the values to the dictionary
+    astar2["Heuristic Time"].append(t)
+    astar2["Total Time"].append(total_t)
+    astar2["Expanded Nodes"].append(nodes)
+    astar2["Solution Length"].append(length)
+
+
+# function for writing data to csv
+def write_to_csv(a1, a2):
+    alg = [a1, a2]
+    names = ["astar_h1.csv", "astar_h2.csv"]
+
+    for n in names:
+        # get the element from alg
+        a = alg[names.index(n)]
+        # append to path
+        if path.exists(n):
+            a.to_csv(n, mode='a', header=False)
+        # create a new file
+        else:
+            a.to_csv(n)
+
+
+# add a border for data separation in csv
+def append_border(i, algs):
+    for a in algs:
+        a["Heuristic Time"].append("M = {}".format(i))
+        a["Total Time"].append("M = {}".format(i))
+        a["Expanded Nodes"].append("M = {}".format(i))
+        a["Solution Length"].append("M = {}".format(i))
 
 
 # function that randomly shuffles the
