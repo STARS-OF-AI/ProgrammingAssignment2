@@ -37,31 +37,57 @@ def main():
     # main for loop with n=10 runs
     for j in range(0, 10):
         puzzle = scramble(i, final)
-        # p.recursive_best_first_h1(puzzle, final)
-        # p.recursive_best_first_h2(puzzle, final)
-
         front = [[p.heuristic_1(puzzle), puzzle]]
-        path = front[0]
-        p.RBFS_H1(front, final, path)
-        p.RBFS_H2(front, final, path)
+        r_path = front[0]
 
+        # running the RBFS search
+        rbfs_h1(front, final, r_path, algs[0])
+        rbfs_h2(front, final, r_path, algs[1])
+
+        # running the A* search
         astar_h1(puzzle, final, algs[2])
         astar_h2(puzzle, final, algs[-1])
 
+    # appending to data frames
+    r1 = DataFrame(algs[0], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length'])
+    r2 = DataFrame(algs[1], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length'])
     a1 = DataFrame(algs[2], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length'])
     a2 = DataFrame(algs[-1], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length'])
 
     # function for writing to csv
-    write_to_csv(a1, a2)
+    write_to_csv(r1, r2, a1, a2)
 
-    print(a1)
-    print(a2)
+    print(r1)
+    print(r2)
+    # print(a1)
+    # print(a2)
 
 
+# run the RBFS search algorithm for heuristic 1
+def rbfs_h1(front, final, r_path, rbfs1):
+    # catch time, total time, num expanded nodes, soln length
+    t, total_t, nodes, length = p.RBFS_H1(front, final, r_path)
+
+    # append the values to the dictionary
+    rbfs1["Heuristic Time"].append(t)
+    rbfs1["Total Time"].append(total_t)
+    rbfs1["Expanded Nodes"].append(nodes)
+    rbfs1["Solution Length"].append(length)
+
+
+# run the RBFS search algorithm for heuristic 2
+def rbfs_h2(front, final, r_path, rbfs2):
+    t, total_t, nodes, length = p.RBFS_H2(front, final, r_path)
+
+    # append the values to the dictionary
+    rbfs2["Heuristic Time"].append(t)
+    rbfs2["Total Time"].append(total_t)
+    rbfs2["Expanded Nodes"].append(nodes)
+    rbfs2["Solution Length"].append(length)
+
+
+# run the A* search algorithm for heuristic 1
 def astar_h1(puzzle, final, astar1):
-    # defining dict to store data
-
-    # run the A* search algorithm for heuristic 1
     t, total_t, nodes, length = p.iterative_deepening_astar_h1(puzzle, final)
 
     # append the values to the dictionary
@@ -71,8 +97,8 @@ def astar_h1(puzzle, final, astar1):
     astar1["Solution Length"].append(length)
 
 
+# run the A* search algorithm for heuristic 2
 def astar_h2(puzzle, final, astar2):
-    # run the A* search algorithm for heuristic 1
     t, total_t, nodes, length = p.iterative_deepening_astar_h2(puzzle, final)
 
     # append the values to the dictionary
@@ -83,13 +109,14 @@ def astar_h2(puzzle, final, astar2):
 
 
 # function for writing data to csv
-def write_to_csv(a1, a2):
-    alg = [a1, a2]
-    names = ["astar_h1.csv", "astar_h2.csv"]
+def write_to_csv(r1, r2, a1, a2):
+    alg = [r1, r2, a1, a2]
+    names = ["rbfs_h1.csv", "rbsf_h2.csv", "astar_h1.csv", "astar_h2.csv"]
 
     for n in names:
         # get the element from alg
         a = alg[names.index(n)]
+
         # append to path
         if path.exists(n):
             a.to_csv(n, mode='a', header=False)

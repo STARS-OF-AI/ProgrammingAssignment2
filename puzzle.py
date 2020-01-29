@@ -6,6 +6,8 @@ CS 531 - AI
 February 3, 2020
 ***********************************
 """
+
+
 import random
 from datetime import datetime
 
@@ -58,7 +60,7 @@ def RBFS_H1(front, end, path):
     solver1.Ttime += millis(stime)
     #print('solver', solver1)
     #path.pop(0)
-    print("RBFS With H1")
+    print("\nRBFS With H1")
     print("Number of expanded nodes:",solver1.expanded_nodes)
     y = 0
    # print("front ", solver1.path)
@@ -68,6 +70,10 @@ def RBFS_H1(front, end, path):
     print("Number of misplaced tiles (0 means completely solved) ", heuristic_1(x))
     print("Time on heuristic:", solver1.Htime)
     print("Total time in function: ", solver1.Ttime)
+
+    # time, total time, num expanded nodes, soln length
+    return solver1.Htime, solver1.Ttime, solver1.expanded_nodes, y
+
     
     
 def actualRecursionH2(solver):
@@ -118,7 +124,9 @@ def RBFS_H2(front, end, path):
     print("Time on heuristic:", solver2.Htime)
     print("Total time in function: ", solver2.Ttime)
     
-    
+    # time, total time, num expanded nodes, soln length
+    return solver2.Htime, solver2.Ttime, solver2.expanded_nodes, y
+
 
 def iterative_deepening_astar_h1(start,end):
     #a*
