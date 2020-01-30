@@ -26,7 +26,7 @@ class Solver:
 def actualRecursionH1(solver):
     h1 = []
     i = 0
-    f_limit = 20
+    f_limit = 40
     
     if solver.front:
         solver.path = solver.front[i]
@@ -79,7 +79,7 @@ def RBFS_H1(front, end, path):
 def actualRecursionH2(solver):
     h2 = []
     i = 0
-    f_limit = 20
+    f_limit = 40
     
     if solver.front:
         solver.path = solver.front[i]

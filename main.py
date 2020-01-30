@@ -51,14 +51,14 @@ def main():
         r2 = DataFrame(algs[1], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length', 'Misplaced Squares'])
         a1 = DataFrame(algs[2], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length', 'Misplaced Squares'])
         a2 = DataFrame(algs[-1], columns=['Heuristic Time', 'Total Time', 'Expanded Nodes', 'Solution Length', 'Misplaced Squares'])
+        print('m of ', i)
+    # function for writing to csv
+    write_to_csv(r1, r2, a1, a2)
 
-        # function for writing to csv
-        write_to_csv(r1, r2, a1, a2)
-
-        print(r1)
-        print(r2)
-        print(a1)
-        print(a2)
+    print(r1)
+    print(r2)
+    print(a1)
+    print(a2)
 
 
 # run the RBFS search algorithm for heuristic 1
