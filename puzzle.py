@@ -5,6 +5,10 @@ Programming Assignment 2
 CS 531 - AI
 February 3, 2020
 ***********************************
+This file contains the Solver class which
+holds the path/time information for each
+algorithm. Also contains the implementation
+of the A* H1, A* H2, RBFS-H1, RBFS-H2 algorithms.
 """
 
 

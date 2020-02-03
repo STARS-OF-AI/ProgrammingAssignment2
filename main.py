@@ -5,6 +5,10 @@ Programming Assignment 2
 CS 531 - AI
 February 3, 2020
 ***********************************
+This file contains the Scrambler function,
+logic for running the A* and RBFS
+algorithms and heuristic combinations, and
+outputs the performance data into a spreadsheet.
 """
 
 import puzzle as p
